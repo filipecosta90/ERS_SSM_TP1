@@ -9,10 +9,10 @@ CFLAGS= -Wall -Wextra -g -O2 -O3
 #nome do executável
 EXECUTABLE=freq_anl
 
-_OBJ = frequency_analysor.o readLineSO.o 
+_OBJ = frequency_analysor.o readSSM.o 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-_DEPS = readLine.h
+_DEPS = readSSM.h
 DEPS = $(patsubst %,$(LDIR)/%,$(_DEPS))
 
 $(EXECUTABLE): $(OBJ)
