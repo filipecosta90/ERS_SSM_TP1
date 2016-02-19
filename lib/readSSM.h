@@ -16,6 +16,6 @@
 
 int readln( int fd, char *buffer);
 
-int readfreq ( int fd, char *buffer, int *frequency_table);
+int readfreq ( int fd, char *buffer, long *frequency_table);
 
 #endif

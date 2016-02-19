@@ -1,4 +1,4 @@
- ODIR=source
+ODIR=src
 LDIR =../lib
 
 #compilador
@@ -9,7 +9,7 @@ CFLAGS= -Wall -Wextra -g -O2 -O3
 #nome do executável
 EXECUTABLE=freq_anl
 
-_OBJ = frequency_analysor.o readSSM.o 
+_OBJ = frequency_analysor.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 _DEPS = readSSM.h
@@ -21,4 +21,4 @@ $(EXECUTABLE): $(OBJ)
 .PHONY: clean
 
 clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
+	rm -f $(ODIR)/*.o && rm freq_anl
