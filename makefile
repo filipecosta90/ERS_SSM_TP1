@@ -1,24 +1,20 @@
-ODIR=src
-LDIR =../lib
 
-#compilador
-CC=gcc-5
+CXX = g++-5
+CC = gcc-5
+
 #flags
-CFLAGS= -Wall -Wextra -g -O2 -O3
+CFLAGS= -Wall -O2 -O3
 
-#nome do executável
-EXECUTABLE=freq_anl
+CPPFLAGS= -Wall -O2 -O3 -std=c++11
 
-_OBJ = frequency_analysor.o
-OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
+c: freq_analyse_c.o
+	$(CC) $(CFLAGS) -o freq_anl_c freq_analyse_c.c
 
-_DEPS = readSSM.h
-DEPS = $(patsubst %,$(LDIR)/%,$(_DEPS))
+cpp: freq_analyse_cpp.o
+	$(CXX) $(CPPFLAGS) -o freq_anl_cpp freq_analyse_cpp.cpp
 
-$(EXECUTABLE): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^ 
+all: c cpp
 
 .PHONY: clean
-
 clean:
-	rm -f $(ODIR)/*.o && rm freq_anl
+	rm  *.o && rm freq_anl_c && rm freq_anl_cpp

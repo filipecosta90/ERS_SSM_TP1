@@ -58,12 +58,17 @@ int main(int argc, char *argv[])
     printf("Tabela Frequencias\n");
     printf("------------------\n");
     int total_caracteres = 0;
+    int total_distinctos = 0;
     for (int pos = 0; pos < 256; pos++ ){
       printf("%d\t%d\n", pos, tabela_frequencias[pos]);
       total_caracteres += tabela_frequencias[pos];
+      if ( tabela_frequencias[pos] > 0 ){
+        total_distinctos++;
+      }
     }
     printf("------------------\n");
     printf("total caracteres: %d\n", total_caracteres );
+    printf("total caracteres distinctos: %d\n", total_distinctos );
     return EXIT_SUCCESS;
   }
 }
