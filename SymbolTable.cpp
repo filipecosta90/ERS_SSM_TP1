@@ -28,13 +28,24 @@ bool SymbolTable::read_file( FILE* infile ){
     }
     /* if the key exists*/
     else {
-      current.spotted();
+      Symbol actual = *got;
       symbols_table.erase(got);
-      symbols_table.insert(current);
+      actual.spotted();
+      symbols_table.insert(actual);
     }
     total_symbols++;
   }
   fclose(infile);
+
+  std::set<Symbol, Symbol::compare>::iterator it = symbols_table.begin();
+  for ( ; it != symbols_table.end(); ++it )
+  {
+    Symbol actualSymbol = *it;
+    symbols_table.erase(it);
+    actualSymbol.calculate_relative_freq(total_symbols);
+    symbols_table.insert(actualSymbol);
+  }
+
   return EXIT_SUCCESS;
 }
 
@@ -46,17 +57,21 @@ int SymbolTable::get_total_symbols() const {
   return total_symbols;
 }
 
+void SymbolTable::printSymbols( std::ostream& stream ) const {
+  std::set<Symbol, Symbol::compare>::const_iterator it = symbols_table.begin();
+  for ( ; it != symbols_table.end(); ++it )
+  {
+    Symbol actualSymbol = *it;
+    stream << actualSymbol;
+  }
+}
+
 std::ostream& operator<< (std::ostream& os, const SymbolTable& obj) {
   os << "------------------" << std::endl;
-  /*for ( auto it = obj.symbols_table.begin(); it != obj.symbols_table.end(); ++it ){
-    Symbol actualSymbol = *it.
-      os << actualSymbol;
-  }
-*/
+  obj.printSymbols( os );
   os << "------------------" << std::endl;
   os <<  "total caracteres: " << obj.get_total_symbols()  << std::endl;  
   os <<  "total caracteres distintos: " << obj.get_distinct_symbols()  << std::endl;
-
   return os;
 }
 

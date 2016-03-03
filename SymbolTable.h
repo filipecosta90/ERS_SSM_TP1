@@ -25,7 +25,8 @@ class SymbolTable{
     bool read_file( FILE* infile );
     int get_distinct_symbols() const;
     int get_total_symbols() const;
-  
+    void printSymbols (std::ostream& ostream) const;
+    
     friend std::ostream& operator<<(std::ostream&, const SymbolTable&);
 };
 
