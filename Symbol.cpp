@@ -37,8 +37,7 @@ void Symbol::spotted() {
 
 /* adds a new less significant bit*/
 void Symbol::add_less_sig_bit( int bit ){
-  character++;
-  std::bitset<1> new_bit (bit);
+  std::bitset<1> new_bit(bit);
   codification.push_back(new_bit);
 }
 

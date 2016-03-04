@@ -10,7 +10,6 @@
 #include <vector>
 #include "Symbol.h"
 
-
 #ifndef SYMBOL_TABLE_H
 #define SYMBOL_TABLE_H
 
@@ -30,7 +29,7 @@ class SymbolTable{
     void fill_bit ( std::vector <Symbol>& huffman_table,
       int start_position, int length , int value_bit);
 
-    float table_frequency ( std::vector <Symbol>& partial_table, 
+    int table_frequency ( std::vector <Symbol>& partial_table, 
         int pos_start,
         int size
     );
@@ -47,8 +46,5 @@ class SymbolTable{
 
     friend std::ostream& operator<<(std::ostream&, const SymbolTable&);
 };
-
-
-
 
 #endif
