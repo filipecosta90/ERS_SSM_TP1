@@ -27,15 +27,15 @@ class SymbolTable{
 
     int get_distinct_symbols() const;
     int get_total_symbols() const;
-    void fill_bit ( std::vector <Symbol> huffman_table,
+    void fill_bit ( std::vector <Symbol>& huffman_table,
       int start_position, int length , int value_bit);
 
-    float table_frequency ( std::vector <Symbol> partial_table, 
+    float table_frequency ( std::vector <Symbol>& partial_table, 
         int pos_start,
         int size
     );
 
-    bool codify_huffman_partial ( std::vector <Symbol> partial_table, 
+    bool codify_huffman_partial ( std::vector <Symbol>& partial_table, 
         int pos_start, 
         int size );
 

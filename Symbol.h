@@ -18,7 +18,6 @@ class Symbol {
     int absolut_freq;
     float relative_freq;
     std::vector<std::bitset<1>> codification;
-    int bitcalls;
 
   public:
     Symbol( char32_t ch );
