@@ -41,7 +41,7 @@ class SymbolTable{
 
     bool codify_huffman();
 
-    void print_huffman (std::ostream& ostream) const;
+    void print_huffman (std::ostream& ostream) ;
     
     void printSymbols (std::ostream& ostream) const;
 
