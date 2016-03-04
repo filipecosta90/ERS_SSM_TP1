@@ -20,6 +20,7 @@ int main (int argc, char* argv[])
   bool result = table.read_file(in);
   if ( result == EXIT_SUCCESS ){
     std::cout << table;
+    table.codify_huffman();
     return EXIT_SUCCESS;
   }
   else {

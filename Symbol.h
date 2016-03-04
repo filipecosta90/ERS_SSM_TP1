@@ -9,7 +9,6 @@
 #include <bitset>         // std::bitset
 #include <vector>
 
-// A2DD.h
 #ifndef SYMBOL_H
 #define SYMBOL_H
 
@@ -24,12 +23,12 @@ class Symbol {
     Symbol( char32_t ch );
     struct compare {
       bool operator()(const Symbol& a, const Symbol& b)const{
-      if (a.relative_freq != b.relative_freq) {
-    return a.relative_freq > b.relative_freq;
-  }
-else {
+        if (a.relative_freq != b.relative_freq) {
+          return a.relative_freq > b.relative_freq;
+        }
+        else {
           return a.character < b.character;
-       }
+        }
       };
     };
 
@@ -42,9 +41,8 @@ else {
     char32_t get_character() const;
     int get_absolut_freq() const ;
     float get_relative_freq() const;
-    
-    void calculate_relative_freq( int total_symbols );
 
+    void calculate_relative_freq( int total_symbols );
     void print_codification (std::ostream& ostream) const;
     friend std::ostream& operator<< (std::ostream&, const Symbol&);
 };

@@ -1,3 +1,4 @@
+#include <iomanip>
 #include <stddef.h>
 #include <stdlib.h>
 #include <iostream>
@@ -26,6 +27,7 @@ void Symbol::add_less_sig_bit( std::bitset<1> s_bit ){
   std::vector<std::bitset<1>>::iterator it;
   it = codification.end();
   codification.insert ( it , s_bit );
+  std::cout << "inserted " << s_bit << std::endl;
 }
 
 char32_t Symbol::get_character() const {
@@ -53,7 +55,7 @@ void Symbol::print_codification ( std::ostream& stream ) const {
 }
 
 std::ostream& operator<< ( std::ostream& os, const Symbol& obj ){
-  os << obj.get_character() << "\t" << obj.get_absolut_freq() << "\t" << std::fixed << std::setprecision(3) << obj.get_relative_freq() << "\t"  ;
+  os << obj.get_character() << "\t" << obj.get_absolut_freq() << "\t" << std::fixed << std::setprecision(5) << obj.get_relative_freq() << "\t"  ;
   obj.print_codification( os );
   os << std::endl;
   return os;
