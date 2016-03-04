@@ -17,10 +17,12 @@ class Symbol {
     char32_t character;
     int absolut_freq;
     float relative_freq;
-    std::vector < std::bitset<1>> codification;
+    int codification;
 
   public:
     Symbol( char32_t ch );
+    Symbol( );
+    Symbol& operator =(const Symbol &other);
     struct compare {
       bool operator()(const Symbol& a, const Symbol& b)const{
         if (a.relative_freq != b.relative_freq) {
@@ -33,7 +35,7 @@ class Symbol {
     };
 
     /* adds a new less significant bit*/
-    void add_less_sig_bit( std::bitset<1> s_bit );
+    void add_less_sig_bit( int s_bit );
 
     /* increases the absolut frequency */
     void spotted();

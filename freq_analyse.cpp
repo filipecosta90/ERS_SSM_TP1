@@ -21,6 +21,7 @@ int main (int argc, char* argv[])
   if ( result == EXIT_SUCCESS ){
     std::cout << table;
     table.codify_huffman();
+    table.print_huffman(std::cout);
     return EXIT_SUCCESS;
   }
   else {

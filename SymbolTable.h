@@ -19,6 +19,7 @@ class SymbolTable{
     std::set <Symbol, Symbol::compare> symbols_table;
     int distinct_symbols;
     int total_symbols;
+    std::vector<Symbol> huffman_table;
 
     // public:
     SymbolTable();
@@ -26,23 +27,22 @@ class SymbolTable{
 
     int get_distinct_symbols() const;
     int get_total_symbols() const;
-    void fill_bit ( std::set <Symbol,Symbol::compare>::iterator it_start,
-        std::set<Symbol,Symbol::compare>::iterator it_end, std::bitset<1> value_bit);
+    void fill_bit ( std::vector <Symbol> huffman_table,
+      int start_position, int length , int value_bit);
 
-    float table_frequency ( std::set <Symbol, Symbol::compare> partial_table, 
-        std::set <Symbol,Symbol::compare>::iterator it_start,
-        std::set<Symbol,Symbol::compare>::iterator it_end );
+    float table_frequency ( std::vector <Symbol> partial_table, 
+        int pos_start,
+        int size
+    );
 
-    int subtable_size ( std::set <Symbol, Symbol::compare> partial_table, 
-        std::set <Symbol,Symbol::compare>::iterator it_start,
-        std::set<Symbol,Symbol::compare>::iterator it_end );
-
-    void codify_huffman_partial ( std::set <Symbol, Symbol::compare> partial_table, 
-        std::set<Symbol,Symbol::compare>::iterator it_start, 
-        std::set<Symbol,Symbol::compare>::iterator it_end );
+    bool codify_huffman_partial ( std::vector <Symbol> partial_table, 
+        int pos_start, 
+        int size );
 
     bool codify_huffman();
 
+    void print_huffman (std::ostream& ostream) const;
+    
     void printSymbols (std::ostream& ostream) const;
 
     friend std::ostream& operator<<(std::ostream&, const SymbolTable&);

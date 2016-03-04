@@ -14,13 +14,14 @@
 #include "SymbolTable.h"
 
 SymbolTable::SymbolTable(){
-
-}
+  distinct_symbols = 0;
+  total_symbols = 0;
+};
 
 bool SymbolTable::read_file( FILE* infile ){
   for ( char32_t wc; wc != WEOF; wc = getwc(infile) ){
     Symbol current( wc );
-    std::set<Symbol, Symbol::compare>::iterator got = symbols_table.find (current);
+    std::set<Symbol, Symbol::compare>::const_iterator got = symbols_table.find (current);
     /* if the key doesn't exists*/
     if ( got == symbols_table.end() ){
       current.spotted();
@@ -38,7 +39,7 @@ bool SymbolTable::read_file( FILE* infile ){
   }
   fclose(infile);
 
-  std::set<Symbol, Symbol::compare>::iterator it = symbols_table.begin();
+  std::set<Symbol, Symbol::compare>::const_iterator it = symbols_table.begin();
   for ( ; it != symbols_table.end(); ++it )
   {
     Symbol actualSymbol = *it;
@@ -57,81 +58,82 @@ int SymbolTable::get_total_symbols() const {
   return total_symbols;
 }
 
-void SymbolTable::fill_bit ( std::set <Symbol,Symbol::compare>::iterator it_start, 
-    std::set<Symbol,Symbol::compare>::iterator it_end, std::bitset<1> value_bit ){
-  std::set<Symbol, Symbol::compare>::iterator it_current = it_start ;
-
-  for ( ; it_current != it_end; ++it_current ){
-    Symbol actualSymbol = *it_current;
-    symbols_table.erase(it_current);
+void SymbolTable::fill_bit ( std::vector <Symbol> huffman_table, int start_position,
+    int length, int value_bit ){
+  for ( int pos = start_position; pos < (length+start_position) ; pos++ ){
+    Symbol actualSymbol = huffman_table.at(pos);
     actualSymbol.add_less_sig_bit( value_bit );
-    symbols_table.insert(actualSymbol);
-
   }
 }
 
-
-float SymbolTable::table_frequency ( std::set <Symbol, Symbol::compare> partial_table, 
-    std::set <Symbol,Symbol::compare>::iterator it_start, 
-    std::set<Symbol,Symbol::compare>::iterator it_end ){
-
-  int remaining_elements = std::distance(it_start,it_end);
-
-  std::set<Symbol, Symbol::compare>::iterator it_current = it_start ;
+float SymbolTable::table_frequency ( 
+    std::vector <Symbol> partial_table, 
+    int start,
+    int size
+    ){
   float accumulated_frequency = 0.0;
-  for ( ; remaining_elements > 0; ++it_current, remaining_elements-- ){
-    Symbol actualSymbol = *it_current;
+  for ( int pos = start ; pos < size ;  ++pos ){
+    Symbol actualSymbol = huffman_table.at(pos);
     accumulated_frequency += actualSymbol.get_relative_freq();
   }
   return accumulated_frequency;
 }
 
-bool SymbolTable::codify_huffman_partial ( std::set <Symbol, Symbol::compare> partial_table, 
-    std::set<Symbol,Symbol::compare>::iterator it_start, 
-    std::set<Symbol,Symbol::compare>::iterator it_end, int size ){
-  int remaining_elements = std::distance(it_start,it_end);
-
-  if ( size < 2  ){ 
-    return EXIT_SUCESS;
+bool SymbolTable::codify_huffman_partial ( std::vector <Symbol> huffman_table, int start_position, int end_position ){
+  int size = end_position - start_position;
+  if ( size  <= 1  ){ 
+    return EXIT_SUCCESS;
   }
   else 
   {
-  std::set<Symbol, Symbol::compare>::iterator it_current, it_one_start, it_zero_end;
-  float accumulated_frequency = 0.0;
-  float remaining_frequency = table_frequency ( partial_table, it_start, it_end );
-  it_current =  it_start;
+    float accumulated_frequency = 0.0;
+    float remaining_frequency = table_frequency ( huffman_table, start_position, size );
+    int remaining_zero_elements = 0;
+    int remaining_one_elements = size;
+    int current_position = start_position;
 
+    for ( ;  accumulated_frequency < remaining_frequency / 2.0 && current_position < size  ; ++current_position ){
+      Symbol actual_symbol = huffman_table.at(current_position);
+      float actual_frequency =  actual_symbol.get_relative_freq();
+      accumulated_frequency += actual_frequency;
+      remaining_zero_elements++;
+      remaining_one_elements--;
+    }
+   // std:: cout << "accumulated frequency " << accumulated_frequency << std::endl;
 
-  
-  for ( ;  accumulated_frequency < remaining_frequency / 2.0 && remaining_elements > 0 ; ++it_current, remaining_elements-- ){
-    Symbol actual_symbol = *it_current;
-    float actual_frequency =  actual_symbol.get_relative_freq();
-    accumulated_frequency += actual_frequency;
-  }
-  it_one_start = it_current;
-  int remaining_zero_elements = std::distance(it_start,it_one_start);
-  int remaining_one_elements = std::distance(it_one_start, it_end);
-  std::cout << "Remaining 0s: " << remaining_zero_elements << " Remaining 1s: " << remaining_one_elements <<  std::endl;
-  std::bitset<1> b0 ("0");
-  std::bitset<1> b1 ("1");
-  if ( remaining_zero_elements > 1 ) {
-    fill_bit ( it_start , it_zero_end ,  b0  );
-    codify_huffman_partial ( partial_table, it_start, it_one_start );   
-  }
-  if ( remaining_one_elements > 0 ){
-    fill_bit ( it_one_start , it_end ,  b1 );
-    codify_huffman_partial ( partial_table, it_one_start , it_end );   
-  }
+   // std::cout << "Remaining 0s: " << remaining_zero_elements << " Remaining 1s: " << remaining_one_elements <<  std::endl;
+    if ( remaining_zero_elements > 1 ) {
+       fill_bit ( huffman_table , start_position, remaining_zero_elements ,  0  );
+      codify_huffman_partial ( huffman_table, start_position, remaining_zero_elements );   
+    }
+    if ( remaining_one_elements > 0 ){
+      fill_bit ( huffman_table , start_position+remaining_zero_elements, remaining_one_elements ,  1 );
+      codify_huffman_partial ( huffman_table, remaining_zero_elements ,  size );
+    }
   }
 }
 
 bool SymbolTable::codify_huffman ( ){
-  std::set<Symbol, Symbol::compare>::iterator table_start = symbols_table.begin();
-  std::set<Symbol, Symbol::compare>::iterator table_end = symbols_table.end();
-  int size = symbols_table.size();
-  codify_huffman_partial ( symbols_table, table_start, table_end, size );   
+  std::set<Symbol, Symbol::compare>::const_iterator it = symbols_table.begin();
+  for ( ; it != symbols_table.end() ; ++it ){
+    Symbol actualSymbol = *it;
+    huffman_table.push_back(actualSymbol);
+  }
+  int size = huffman_table.size();
+
+  codify_huffman_partial ( huffman_table, 0 , size );   
   return EXIT_SUCCESS;
 }
+
+void SymbolTable::print_huffman( std::ostream& stream ) const {
+  
+  for ( int pos=0; pos < huffman_table.size() ; ++pos )
+  {
+    Symbol actualSymbol = huffman_table.at(pos);
+    stream << actualSymbol;
+  }
+}
+
 
 void SymbolTable::printSymbols( std::ostream& stream ) const {
   std::set<Symbol, Symbol::compare>::const_iterator it = symbols_table.begin();
