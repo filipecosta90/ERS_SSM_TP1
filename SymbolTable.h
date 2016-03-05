@@ -14,16 +14,20 @@
 #define SYMBOL_TABLE_H
 
 class SymbolTable{
-  public:
+  private:
+    /* The set of symbols that the original file contains ordered by 
+     * absolut frequency and by character if the frequency is equal*/
     std::set <Symbol, Symbol::compare> symbols_table;
+    /* The number of distinct symbols read from the original file */
     int distinct_symbols;
+    /* The total symbols read from the original file */
     int total_symbols;
+    /* The huffman table for the symbols from the the original file */
     std::vector<Symbol> huffman_table;
 
-    // public:
+    public:
     SymbolTable();
-    bool read_file( FILE* infile );
-
+    bool read_symbols( std::vector<char32_t> symbols );
     int get_distinct_symbols() const;
     int get_total_symbols() const;
     void fill_bit ( std::vector <Symbol>& huffman_table,

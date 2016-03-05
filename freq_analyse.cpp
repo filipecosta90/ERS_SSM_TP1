@@ -8,20 +8,26 @@
 #include <string.h>
 #include <bitset>         // std::bitset
 #include <vector>
+#include <unistd.h>
 
 
-#include "SymbolTable.h"
+#include "FileCompress.h"
 
 int main (int argc, char* argv[])
 {
-  FILE* in;
-  in = fopen(argv[1], "r");
-  SymbolTable table;
-  bool result = table.read_file(in);
-  if ( result == EXIT_SUCCESS ){
-    std::cout << table;
-    table.codify_huffman();
-    table.print_huffman(std::cout);
+    if(const char* env_p = std::getenv("OMP_NUM_THREADS")){
+     std::cout << "OMP ENABLED " << std::endl;
+    }
+    long pagesize = sysconf(_SC_PAGESIZE);
+     std::cout << "_SC_PAGESIZE " << pagesize << std::endl;
+  
+     FileCompress compress (argv[1], argv[2], pagesize );
+     bool result = compress.read_file( );
+
+  if ( result == true ){
+//    compress.codify_huffman();
+ //   compress.write_file();
+    std::cout << compress;
     return EXIT_SUCCESS;
   }
   else {

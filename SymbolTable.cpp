@@ -18,8 +18,11 @@ SymbolTable::SymbolTable(){
   total_symbols = 0;
 };
 
-bool SymbolTable::read_file( FILE* infile ){
-  for ( char32_t wc; wc != WEOF; wc = getwc(infile) ){
+bool SymbolTable::read_symbols( std::vector<char32_t> symbols ){
+
+  for  ( char32_t wc; !symbols.empty(); symbols.pop_back() )
+  {
+    wc = symbols.back();
     Symbol current( wc );
     std::set<Symbol, Symbol::compare>::const_iterator got = symbols_table.find (current);
     /* if the key doesn't exists*/
@@ -37,7 +40,6 @@ bool SymbolTable::read_file( FILE* infile ){
     }
     total_symbols++;
   }
-  fclose(infile);
 
   std::set<Symbol, Symbol::compare>::const_iterator it = symbols_table.begin();
   for ( ; it != symbols_table.end(); ++it )
@@ -124,12 +126,12 @@ void SymbolTable::print_huffman( std::ostream& stream ) {
   stream << "---------------------" << std::endl;
   stream << "Codificação de Hufman" << std::endl;
   stream << "---------------------" << std::endl;
-   for ( int pos=0; pos < huffman_table.size() ; ++pos )
+  for ( int pos=0; pos < huffman_table.size() ; ++pos )
   {
     stream <<  huffman_table.at(pos);
   }
   stream << "---------------------" << std::endl;
- 
+
 }
 
 
