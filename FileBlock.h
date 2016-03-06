@@ -22,6 +22,8 @@ class FileBlock{
     int block_start;
     int block_end;
     std::string input_name;
+    std::vector <std::bitset<1>> encoded_block;
+    float compression_ratio;
 
   public:
     FileBlock( 
@@ -30,10 +32,13 @@ class FileBlock{
         );
 
     void read_chars();
-   void produce_symbols();
-    //  bool codify();
-//    bool write_bytes();
+    void produce_symbols();
+    void codify_huffman();
+    void produce_bitstream();
 
+    std::vector <std::bitset<1>> get_bitstream() const;
+    int get_block_number() const;
+    float get_compression_ratio() const;
 
     friend std::ostream& operator<<(std::ostream&, const FileBlock&);
 };

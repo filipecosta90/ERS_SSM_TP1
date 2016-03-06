@@ -41,8 +41,34 @@ void FileBlock::produce_symbols(){
   symbol_table.read_symbols(input_chars);
 }
 
+void FileBlock::codify_huffman(){
+  symbol_table.codify_huffman();
+}
+
+void FileBlock::produce_bitstream(){
+  std::vector<char>::const_iterator it = input_chars.begin();
+  for  ( ; it != input_chars.end() ; ++it )
+  {
+    std::vector<std::bitset<1>> char_encoded;
+    char_encoded = symbol_table.encode_symbol ( *it );
+    encoded_block.push_back(char_encoded);
+  }
+}
+
+std::vector <std::bitset<1>> FileBlock::get_bitstream() const {
+  return encoded_block;
+}
+
+int FileBlock::get_block_number() const {
+  return block_number;
+}
+
+float FileBlock::get_compression_ratio() const {
+  return compression_ratio; 
+}
+
 std::ostream& operator<< (std::ostream& os, const FileBlock& obj) {
-  os << "--------------------" << std::endl;
+  os << "\t#" << obj.get_block_number() << " Compression Ratio: " <<obj.get_compression_ratio() << std::endl;
   return os;
 }
 

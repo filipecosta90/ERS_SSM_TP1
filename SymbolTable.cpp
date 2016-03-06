@@ -115,7 +115,6 @@ bool SymbolTable::codify_huffman ( ){
     huffman_table.push_back( actualSymbol );
   }
   int size = huffman_table.size();
-
   codify_huffman_partial ( huffman_table, 0 , size  );   
   return EXIT_SUCCESS;
 }
@@ -129,9 +128,14 @@ void SymbolTable::print_huffman( std::ostream& stream ) {
     stream <<  huffman_table.at(pos);
   }
   stream << "---------------------" << std::endl;
-
 }
 
+std::vector <std::bitset<1>> SymbolTable::encode_symbol ( char symbol ) {
+  std::vector<char>::iterator it;
+    it = find ( huffman_table.begin(), huffman_table.end(), symbol );
+    Symbol current_symbol = *it;
+    return current_symbol.get_codification();
+}
 
 void SymbolTable::printSymbols( std::ostream& stream ) const {
   std::set<Symbol, Symbol::compare>::const_iterator it = symbols_table.begin();

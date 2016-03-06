@@ -25,18 +25,18 @@ class SymbolTable{
     /* The huffman table for the symbols from the the original file */
     std::vector<Symbol> huffman_table;
 
-    public:
+  public:
     SymbolTable();
     void read_symbols( std::vector<char> symbols );
     int get_distinct_symbols() const;
     int get_total_symbols() const;
     void fill_bit ( std::vector <Symbol>& huffman_table,
-      int start_position, int length , int value_bit);
+        int start_position, int length , int value_bit);
 
     int table_frequency ( std::vector <Symbol>& partial_table, 
         int pos_start,
         int size
-    );
+        );
 
     bool codify_huffman_partial ( std::vector <Symbol>& partial_table, 
         int pos_start, 
@@ -44,8 +44,10 @@ class SymbolTable{
 
     bool codify_huffman();
 
+    std::vector <std::bitset<1>> encode_symbol ( char symbol);
+
     void print_huffman (std::ostream& ostream) ;
-    
+
     void printSymbols (std::ostream& ostream) const;
 
     friend std::ostream& operator<<(std::ostream&, const SymbolTable&);

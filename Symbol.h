@@ -44,6 +44,8 @@ class Symbol {
     int get_absolut_freq() const ;
     float get_relative_freq() const;
 
+    std::vector<std::bitset<1>> get_codification() const;
+
     void calculate_relative_freq( int total_symbols );
     void print_codification (std::ostream& ostream) const;
     friend std::ostream& operator<< (std::ostream&, const Symbol&);

@@ -53,6 +53,10 @@ float Symbol::get_relative_freq() const {
   return relative_freq;
 }
 
+std::vector<std::bitset<1>> Symbol::get_codification() const {
+  return codification;
+}
+
 void Symbol::calculate_relative_freq ( int total_symbols ){
   relative_freq =  ( float) ( absolut_freq / (float)  total_symbols );
 }
