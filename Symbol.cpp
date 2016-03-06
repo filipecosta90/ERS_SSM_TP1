@@ -16,7 +16,7 @@ Symbol::Symbol( ) {
   relative_freq = 0.0;
 };
 
-Symbol::Symbol( char32_t ch ) {
+Symbol::Symbol( char ch ) {
   character = ch;
   absolut_freq = 0;
   relative_freq = 0.0;
@@ -41,7 +41,7 @@ void Symbol::add_less_sig_bit( int bit ){
   codification.push_back(new_bit);
 }
 
-char32_t Symbol::get_character() const {
+char Symbol::get_character() const {
   return character;
 }
 

@@ -27,7 +27,7 @@ class SymbolTable{
 
     public:
     SymbolTable();
-    bool read_symbols( std::vector<char32_t> symbols );
+    void read_symbols( std::vector<char> symbols );
     int get_distinct_symbols() const;
     int get_total_symbols() const;
     void fill_bit ( std::vector <Symbol>& huffman_table,

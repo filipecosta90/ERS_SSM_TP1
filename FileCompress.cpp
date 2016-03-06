@@ -33,21 +33,21 @@ bool FileCompress::read_file( ){
   int next_block_size;
   for ( int block = 0; left_file_size > 0 ; block++ ){
     if (left_file_size > block_size){
-    left_file_size = left_file_size - block_size;
-    next_block_size = block_size;
+      left_file_size = left_file_size - block_size;
+      next_block_size = block_size;
     }
     else {
-    next_block_size = left_file_size;
+      next_block_size = left_file_size;
       left_file_size = 0;
     }
 
     current_block_end = current_block_start + next_block_size;
     FileBlock new_block ( input_file, block,  current_block_start ,current_block_end );  
-      std::cout << "reading block #" << block  << "(" << current_block_start << "," << current_block_end <<")" << std::endl;
-      new_block.read_chars();
+    new_block.read_chars();
+    new_block.produce_symbols();
+
     current_block_start+=block_size;
   }
-  std::cout << " block reading completed " << std::endl;
   return true;
 }
 

@@ -25,7 +25,7 @@ class FileCompress{
   public:
     FileCompress( std::string input, std::string output, int block_size );
     bool read_file( );
-//    bool write_file();
+    //    bool write_file();
   //  bool codify_huffman();
 
     friend std::ostream& operator<<(std::ostream&, const FileCompress&);

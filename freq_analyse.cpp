@@ -23,7 +23,6 @@ int main (int argc, char* argv[])
   
      FileCompress compress (argv[1], argv[2], pagesize );
      bool result = compress.read_file( );
-
   if ( result == true ){
 //    compress.codify_huffman();
  //   compress.write_file();

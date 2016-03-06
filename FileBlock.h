@@ -17,7 +17,7 @@ class FileBlock{
   private:
     std::vector <char> input_chars;
     std::vector <std::bitset<1>> output_bytes;
-    std::vector <SymbolTable> symbol_table;
+    SymbolTable symbol_table;
     int block_number;
     int block_start;
     int block_end;
@@ -30,7 +30,7 @@ class FileBlock{
         );
 
     void read_chars();
-    // bool produce_symbols();
+   void produce_symbols();
     //  bool codify();
 //    bool write_bytes();
 

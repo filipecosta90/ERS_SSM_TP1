@@ -14,13 +14,13 @@
 
 class Symbol {
   private:
-    char32_t character;
+    char character;
     int absolut_freq;
     float relative_freq;
     std::vector<std::bitset<1>> codification;
 
   public:
-    Symbol( char32_t ch );
+    Symbol( char ch );
     Symbol( );
     Symbol& operator =(const Symbol &other);
     struct compare {
@@ -40,7 +40,7 @@ class Symbol {
     /* increases the absolut frequency */
     void spotted();
 
-    char32_t get_character() const;
+    char get_character() const;
     int get_absolut_freq() const ;
     float get_relative_freq() const;
 
