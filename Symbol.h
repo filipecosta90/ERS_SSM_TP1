@@ -28,7 +28,6 @@ class Symbol {
         return true;
       }
     }
-    //bool operator!=(const Symbol& rhs){ return !((this) == rhs); }
     struct compare {
       bool operator()(const Symbol& a, const Symbol& b)const{
         if (a.relative_freq != b.relative_freq) {

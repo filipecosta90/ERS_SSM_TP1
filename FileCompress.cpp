@@ -2,18 +2,17 @@
 #include <stdlib.h>
 #include <iostream>
 #include <stdio.h>
-#include <wchar.h>
 #include <map>
 #include <set>
 #include <string.h>
 #include <bitset>         // std::bitset
 #include <vector>
 #include <algorithm>    // std::for_each
-
-#include "FileCompress.h"
-
+#include <math.h>       // log2
 #include <iostream>     // std::cout
 #include <fstream>      // std::ifstream
+
+#include "FileCompress.h"
 
 FileCompress::FileCompress( std::string input, std::string output, int size_block ){
   input_file = input;
@@ -71,8 +70,11 @@ bool FileCompress::produce_bitstream(){
     FileBlock current_block = *it;
     current_block.produce_bitstream();
     std::vector<std::bitset<1>> block_bitset = current_block.get_bitstream();
-   // output_encoding.push_back(block_bitset);
+    output_encoding.insert( output_encoding.end(), block_bitset.begin(), block_bitset.end() );
   }
+
+  output_file_size =  output_encoding.size() / 8 ;  
+  std::cout << "Final bitstream size: " << output_file_size << std::endl;
 }
 
 int FileCompress::get_input_file_size() const {
@@ -92,7 +94,7 @@ int FileCompress::get_block_size() const {
 }
 
 float FileCompress::get_compression_ratio() const {
-  return input_file_size / output_file_size ; 
+  return ( input_file_size - output_file_size ) / input_file_size ; 
 }
 
 void FileCompress::print_compression( std::ostream& stream ) const {

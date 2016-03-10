@@ -18,6 +18,8 @@
 #include <string> // this should be already included in <sstream>
 #include "FileBlock.h"
 #include "SymbolTable.h"
+#include <math.h>       /* log2 */
+
 
 FileBlock::FileBlock( 
     std::string input, 
@@ -35,6 +37,7 @@ void FileBlock::read_chars( ){
   int blocksize = block_end - block_start;
   input_chars.resize(blocksize);
   ifs.read(&input_chars[0], blocksize);
+  input_encoding_block_bytes = input_chars.size() * sizeof (char);
 }
 
 void FileBlock::produce_symbols(){
@@ -51,8 +54,9 @@ void FileBlock::produce_bitstream(){
   {
     std::vector<std::bitset<1>> char_encoded;
     char_encoded = symbol_table.encode_symbol ( *it );
-   encoded_block.insert( encoded_block.end(), char_encoded.begin(), char_encoded.end() );
+    encoded_block.insert( encoded_block.end(), char_encoded.begin(), char_encoded.end() );
   }
+  output_encoding_block_bytes = log2 ( encoded_block.size() ); 
 }
 
 std::vector <std::bitset<1>> FileBlock::get_bitstream() const {
@@ -63,8 +67,9 @@ int FileBlock::get_block_number() const {
   return block_number;
 }
 
-float FileBlock::get_compression_ratio() const {
-  return compression_ratio; 
+float FileBlock::get_compression_ratio() const  {
+  float comp = ( input_encoding_block_bytes - output_encoding_block_bytes ) / input_encoding_block_bytes;
+  return comp; 
 }
 
 std::ostream& operator<< (std::ostream& os, const FileBlock& obj) {

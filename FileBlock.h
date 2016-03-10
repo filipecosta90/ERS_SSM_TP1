@@ -23,6 +23,8 @@ class FileBlock{
     int block_end;
     std::string input_name;
     std::vector <std::bitset<1>> encoded_block;
+    float input_encoding_block_bytes;
+    float output_encoding_block_bytes;
     float compression_ratio;
 
   public:

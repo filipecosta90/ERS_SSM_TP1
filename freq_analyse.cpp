@@ -15,18 +15,22 @@
 
 int main (int argc, char* argv[])
 {
-    if(const char* env_p = std::getenv("OMP_NUM_THREADS")){
-     std::cout << "OMP ENABLED " << std::endl;
-    }
-    long pagesize = sysconf(_SC_PAGESIZE);
-     std::cout << "_SC_PAGESIZE " << pagesize << std::endl;
-  
-     FileCompress compress (argv[1], argv[2], pagesize );
-     bool result = compress.read_file( );
+  if(const char* env_p = std::getenv("OMP_NUM_THREADS")){
+    std::cout << "OMP ENABLED " << std::endl;
+  }
+  long pagesize = sysconf(_SC_PAGESIZE);
+  std::cout << "_SC_PAGESIZE " << pagesize << std::endl;
+
+  FileCompress compress (argv[1], argv[2], pagesize );
+  bool result = compress.read_file( );
   if ( result == true ){
-  compress.codify_huffman();
-  compress.produce_bitstream();  
-  compress.write_file();
+    std::cout << "Finalized reading file" << std::endl;
+    compress.codify_huffman();
+    std::cout << "Finalized codifying" << std::endl;
+    compress.produce_bitstream();
+    std::cout << "Finalized producing bitstream" << std::endl;
+    compress.write_file();
+    std::cout << "Finalized writing file" << std::endl;
     std::cout << compress;
     return EXIT_SUCCESS;
   }
