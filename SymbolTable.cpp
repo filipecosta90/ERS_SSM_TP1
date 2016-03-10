@@ -1,15 +1,7 @@
-#include <stddef.h>
-#include <stdlib.h>
-#include <iostream>
-#include <stdio.h>
-#include <wchar.h>
-#include <map>
-#include <set>
 #include <string.h>
 #include <bitset>         // std::bitset
 #include <vector>
-#include <algorithm>    // std::for_each
-
+#include <algorithm>  // std::find
 #include "Symbol.h"
 #include "SymbolTable.h"
 
@@ -130,11 +122,12 @@ void SymbolTable::print_huffman( std::ostream& stream ) {
   stream << "---------------------" << std::endl;
 }
 
-std::vector <std::bitset<1>> SymbolTable::encode_symbol ( char symbol ) {
-  std::vector<char>::iterator it;
-    it = find ( huffman_table.begin(), huffman_table.end(), symbol );
-    Symbol current_symbol = *it;
-    return current_symbol.get_codification();
+std::vector <std::bitset<1>> SymbolTable::encode_symbol ( char symbol_char ) {
+  std::vector<Symbol>::iterator it;
+  Symbol symbol(symbol_char);
+  it = std::find ( huffman_table.begin(), huffman_table.end(), symbol );
+  Symbol current_symbol = *it;
+  return current_symbol.get_codification();
 }
 
 void SymbolTable::printSymbols( std::ostream& stream ) const {

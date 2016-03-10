@@ -23,6 +23,12 @@ class Symbol {
     Symbol( char ch );
     Symbol( );
     Symbol& operator =(const Symbol &other);
+    bool operator==(const Symbol& rhs){ 
+      if (character == rhs.character ){
+        return true;
+      }
+    }
+    //bool operator!=(const Symbol& rhs){ return !((this) == rhs); }
     struct compare {
       bool operator()(const Symbol& a, const Symbol& b)const{
         if (a.relative_freq != b.relative_freq) {

@@ -69,9 +69,9 @@ bool FileCompress::produce_bitstream(){
   for ( ; it != table_blocks.end(); ++it )
   {
     FileBlock current_block = *it;
-      current_block.produce_bitstream();
+    current_block.produce_bitstream();
     std::vector<std::bitset<1>> block_bitset = current_block.get_bitstream();
-    output_encoding.push_back(block_bitset);
+   // output_encoding.push_back(block_bitset);
   }
 }
 

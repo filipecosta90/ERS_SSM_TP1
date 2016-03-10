@@ -51,7 +51,7 @@ void FileBlock::produce_bitstream(){
   {
     std::vector<std::bitset<1>> char_encoded;
     char_encoded = symbol_table.encode_symbol ( *it );
-    encoded_block.push_back(char_encoded);
+   encoded_block.insert( encoded_block.end(), char_encoded.begin(), char_encoded.end() );
   }
 }
 
