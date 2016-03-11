@@ -85,7 +85,6 @@ bool SymbolTable::codify_huffman_partial ( std::vector <Symbol>& huffman_table, 
 
   int zero_end_position = current_position  ;
   int one_start_position = zero_end_position  ;
-  //std::cout << "zero: (" << start_position << ","<< zero_end_position  << ") one: (" << one_start_position << "," << end_position << ")" << std::endl ;
 
   fill_bit ( huffman_table , start_position, zero_end_position ,  0 );
   fill_bit ( huffman_table , one_start_position , end_position ,  1 );

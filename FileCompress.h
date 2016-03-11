@@ -19,6 +19,7 @@ class FileCompress{
     std::string output_file;
     std::vector <FileBlock> table_blocks;
     std::vector <std::bitset<1>> output_encoding;
+    std::vector <std::bitset<8>> output_bytes;
     float file_compress_ration;
     int block_size;
     int input_file_size;
@@ -39,6 +40,7 @@ class FileCompress{
     int get_block_size() const;
     float get_compression_ratio() const;
 
+     void print_encoding( std::ostream& stream ) const;
     void print_compression (std::ostream& stream) const;
 
     friend std::ostream& operator<<(std::ostream&, const FileCompress&);

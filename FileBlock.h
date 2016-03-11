@@ -16,15 +16,14 @@
 class FileBlock{
   private:
     std::vector <char> input_chars;
-    std::vector <std::bitset<1>> output_bytes;
+    std::vector <std::bitset<1>> output_bits;
     SymbolTable symbol_table;
     int block_number;
     int block_start;
     int block_end;
     std::string input_name;
-    std::vector <std::bitset<1>> encoded_block;
-    float input_encoding_block_bytes;
-    float output_encoding_block_bytes;
+    float input_bits_size;
+    float output_bits_size;
     float compression_ratio;
 
   public:
@@ -41,6 +40,9 @@ class FileBlock{
     std::vector <std::bitset<1>> get_bitstream() const;
     int get_block_number() const;
     float get_compression_ratio() const;
+    float get_input_bits_size() const;
+    float get_output_bits_size() const;
+    void print_fileblock_symbols (std::ostream& ostream) const;
 
     friend std::ostream& operator<<(std::ostream&, const FileBlock&);
 };

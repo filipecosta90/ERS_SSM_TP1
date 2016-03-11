@@ -22,8 +22,13 @@ FileCompress::FileCompress( std::string input, std::string output, int size_bloc
 };
 
 bool FileCompress::write_file(){
-  std::ofstream ofs ( output_file, std::ofstream::binary | std::ofstream::out  );
-  ofs << &output_encoding[0];
+  std::ofstream ofs( output_file.c_str() , std::ios_base::binary );
+  std::vector <std::bitset<8>>::iterator it = output_bytes.begin();
+  for ( ; it != output_bytes.end(); ++it ){
+    std::bitset<8> current_byte = *it;
+    char byte_char = current_byte.to_ulong(); 
+    ofs.write( &byte_char, 1);
+  }
   ofs.close();
   return true;
 }
@@ -72,8 +77,19 @@ bool FileCompress::produce_bitstream(){
     std::vector<std::bitset<1>> block_bitset = current_block.get_bitstream();
     output_encoding.insert( output_encoding.end(), block_bitset.begin(), block_bitset.end() );
   }
+  std::vector<std::bitset<1>>::iterator output_bits = output_encoding.begin();
+  for ( ; output_bits != output_encoding.end(); ){
+    // current_byte: 00000000
+    std::bitset<8> current_byte;
+    int byte_pos = 0;
+    for ( ; output_bits != output_encoding.end() && byte_pos < 8 ; ++output_bits,++byte_pos ){
+      std::bitset<1> current_bit = *output_bits;
+      current_byte.set(byte_pos,current_bit.to_ulong());
 
-  output_file_size =  output_encoding.size() / 8 ;  
+    }
+    output_bytes.push_back(current_byte);
+  }
+  output_file_size = output_bytes.size();
   std::cout << "Final bitstream size: " << output_file_size << std::endl;
 }
 
@@ -94,7 +110,16 @@ int FileCompress::get_block_size() const {
 }
 
 float FileCompress::get_compression_ratio() const {
-  return ( input_file_size - output_file_size ) / input_file_size ; 
+  return ( input_file_size - output_file_size ) / input_file_size * 100 ; 
+}
+
+void FileCompress::print_encoding( std::ostream& stream ) const  {
+  std::vector<FileBlock>::const_iterator it = table_blocks.begin();
+  for ( ; it != table_blocks.end(); ++it )
+  {
+    FileBlock actual_block = *it;
+    actual_block.print_fileblock_symbols( stream );
+  }
 }
 
 void FileCompress::print_compression( std::ostream& stream ) const {

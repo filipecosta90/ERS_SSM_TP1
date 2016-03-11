@@ -9,7 +9,6 @@
 #include <bitset>         // std::bitset
 #include <vector>
 #include <algorithm>    // std::for_each
-#include <iostream>     // std::cout
 #include <fstream>      // std::filebuf, std::ifstream
 
 #include <iomanip>
@@ -37,7 +36,7 @@ void FileBlock::read_chars( ){
   int blocksize = block_end - block_start;
   input_chars.resize(blocksize);
   ifs.read(&input_chars[0], blocksize);
-  input_encoding_block_bytes = input_chars.size() * sizeof (char);
+  input_bits_size = input_chars.size() * sizeof (char) * 8;
 }
 
 void FileBlock::produce_symbols(){
@@ -49,18 +48,19 @@ void FileBlock::codify_huffman(){
 }
 
 void FileBlock::produce_bitstream(){
-  std::vector<char>::const_iterator it = input_chars.begin();
+  std::vector<char>::iterator it = input_chars.begin();
   for  ( ; it != input_chars.end() ; ++it )
   {
     std::vector<std::bitset<1>> char_encoded;
-    char_encoded = symbol_table.encode_symbol ( *it );
-    encoded_block.insert( encoded_block.end(), char_encoded.begin(), char_encoded.end() );
+    char symbol_char = *it;
+    char_encoded = symbol_table.encode_symbol ( symbol_char );
+    output_bits.insert( output_bits.end(), char_encoded.begin(), char_encoded.end() );
   }
-  output_encoding_block_bytes = log2 ( encoded_block.size() ); 
+  output_bits_size = output_bits.size() ; 
 }
 
 std::vector <std::bitset<1>> FileBlock::get_bitstream() const {
-  return encoded_block;
+  return output_bits;
 }
 
 int FileBlock::get_block_number() const {
@@ -68,12 +68,24 @@ int FileBlock::get_block_number() const {
 }
 
 float FileBlock::get_compression_ratio() const  {
-  float comp = ( input_encoding_block_bytes - output_encoding_block_bytes ) / input_encoding_block_bytes;
+  float comp = ( input_bits_size - output_bits_size ) / input_bits_size;
   return comp; 
 }
 
+float FileBlock::get_input_bits_size() const { 
+  return input_bits_size;
+}
+
+float FileBlock::get_output_bits_size() const {
+  return output_bits_size;
+}
+
+void  FileBlock::print_fileblock_symbols (std::ostream& ostream) const {
+  symbol_table.printSymbols( ostream );
+}
+
 std::ostream& operator<< (std::ostream& os, const FileBlock& obj) {
-  os << "\t#" << obj.get_block_number() << " Compression Ratio: " <<obj.get_compression_ratio() << std::endl;
+  os << "\t#" << obj.get_block_number() << " Compression Ratio: " <<obj.get_compression_ratio() <<"(" << obj.get_input_bits_size() << "/" << obj.get_output_bits_size() << ")"<< std::endl;
   return os;
 }
 
