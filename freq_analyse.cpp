@@ -31,7 +31,8 @@ int main (int argc, char* argv[])
     std::cout << "Finalized producing bitstream" << std::endl;
     compress.write_file();
     std::cout << "Finalized writing file" << std::endl;
-    compress.print_encoding(std::cout);
+    std::cout << "Printing Enconding Tables" << std::endl;
+    std::cout << "Finalized printing encoding" << std::endl;
     std::cout << compress;
     return EXIT_SUCCESS;
   }

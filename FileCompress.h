@@ -40,7 +40,7 @@ class FileCompress{
     int get_block_size() const;
     float get_compression_ratio() const;
 
-     void print_encoding( std::ostream& stream ) const;
+    void print_encoding( std::ostream& stream ) const;
     void print_compression (std::ostream& stream) const;
 
     friend std::ostream& operator<<(std::ostream&, const FileCompress&);

@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <iostream>
 #include <stdio.h>
-#include <wchar.h>
-#include <map>
 #include <set>
 #include <string.h>
 #include <bitset>         // std::bitset
@@ -28,6 +26,9 @@ FileBlock::FileBlock(
   block_number = number;
   block_start = start;
   block_end = end;
+  input_bits_size = 0.0;
+  output_bits_size = 0.0;
+  compression_ratio;
 };
 
 void FileBlock::read_chars( ){
@@ -68,7 +69,7 @@ int FileBlock::get_block_number() const {
 }
 
 float FileBlock::get_compression_ratio() const  {
-  float comp = ( input_bits_size - output_bits_size ) / input_bits_size;
+  float comp = output_bits_size / input_bits_size;
   return comp; 
 }
 

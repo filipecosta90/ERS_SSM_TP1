@@ -72,9 +72,8 @@ bool FileCompress::produce_bitstream(){
   std::vector<FileBlock>::iterator it = table_blocks.begin();
   for ( ; it != table_blocks.end(); ++it )
   {
-    FileBlock current_block = *it;
-    current_block.produce_bitstream();
-    std::vector<std::bitset<1>> block_bitset = current_block.get_bitstream();
+    it->produce_bitstream();
+    std::vector<std::bitset<1>> block_bitset = it->get_bitstream();
     output_encoding.insert( output_encoding.end(), block_bitset.begin(), block_bitset.end() );
   }
   std::vector<std::bitset<1>>::iterator output_bits = output_encoding.begin();
@@ -110,7 +109,7 @@ int FileCompress::get_block_size() const {
 }
 
 float FileCompress::get_compression_ratio() const {
-  return ( input_file_size - output_file_size ) / input_file_size * 100 ; 
+  return output_file_size / input_file_size ; 
 }
 
 void FileCompress::print_encoding( std::ostream& stream ) const  {
