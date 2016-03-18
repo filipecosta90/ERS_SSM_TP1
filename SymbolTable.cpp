@@ -121,12 +121,27 @@ void SymbolTable::print_huffman( std::ostream& stream ) {
   stream << "---------------------" << std::endl;
 }
 
+std::vector <std::bitset<1>> SymbolTable::get_header ( ) {
+  return header_table; 
+}
+
 std::vector <std::bitset<1>> SymbolTable::encode_symbol ( char symbol_char ) {
   std::vector<Symbol>::iterator it;
   Symbol symbol(symbol_char);
   it = std::find ( huffman_table.begin(), huffman_table.end(), symbol );
   Symbol current_symbol = *it;
   return current_symbol.get_codification();
+}
+
+void SymbolTable::produce_header (){
+  std::vector<Symbol>::iterator it = huffman_table.begin();
+  for ( ; it != huffman_table.end(); ++it )
+  {
+    Symbol current_symbol = *it;
+    std::vector<std::bitset<1>> char_encoded;
+    char_encoded = it->get_codification();
+    header_table.insert( header_table.end(), char_encoded.begin(), char_encoded.end() );
+  }
 }
 
 void SymbolTable::printSymbols( std::ostream& stream ) const {

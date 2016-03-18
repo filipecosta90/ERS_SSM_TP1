@@ -24,6 +24,7 @@ class SymbolTable{
     int total_symbols;
     /* The huffman table for the symbols from the the original file */
     std::vector<Symbol> huffman_table;
+    std::vector<std::bitset<1>> header_table;
 
   public:
     SymbolTable();
@@ -43,7 +44,8 @@ class SymbolTable{
         int size );
 
     bool codify_huffman();
-
+    void  produce_header();
+    std::vector <std::bitset<1>> get_header();
     std::vector <std::bitset<1>> encode_symbol ( char symbol);
 
     void print_huffman (std::ostream& ostream) ;

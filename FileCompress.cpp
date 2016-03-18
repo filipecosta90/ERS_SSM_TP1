@@ -23,6 +23,9 @@ FileCompress::FileCompress( std::string input, std::string output, int size_bloc
 
 bool FileCompress::write_file(){
   std::ofstream ofs( output_file.c_str() , std::ios_base::binary );
+  std::bitset<32> block_bin (block_size); //convent block size into bit array
+  ofs << block_bin;
+  output_file_size += 4;
   std::vector <std::bitset<8>>::iterator it = output_bytes.begin();
   for ( ; it != output_bytes.end(); ++it ){
     std::bitset<8> current_byte = *it;
@@ -70,12 +73,14 @@ bool FileCompress::codify_huffman(){
 
 bool FileCompress::produce_bitstream(){
   std::vector<FileBlock>::iterator it = table_blocks.begin();
+
   for ( ; it != table_blocks.end(); ++it )
   {
     it->produce_bitstream();
     std::vector<std::bitset<1>> block_bitset = it->get_bitstream();
     output_encoding.insert( output_encoding.end(), block_bitset.begin(), block_bitset.end() );
   }
+
   std::vector<std::bitset<1>>::iterator output_bits = output_encoding.begin();
   for ( ; output_bits != output_encoding.end(); ){
     // current_byte: 00000000
@@ -89,7 +94,6 @@ bool FileCompress::produce_bitstream(){
     output_bytes.push_back(current_byte);
   }
   output_file_size = output_bytes.size();
-  std::cout << "Final bitstream size: " << output_file_size << std::endl;
 }
 
 int FileCompress::get_input_file_size() const {
@@ -109,7 +113,7 @@ int FileCompress::get_block_size() const {
 }
 
 float FileCompress::get_compression_ratio() const {
-  return output_file_size / input_file_size ; 
+  return ( (float) output_file_size / (float) input_file_size ); 
 }
 
 void FileCompress::print_encoding( std::ostream& stream ) const  {
@@ -131,18 +135,18 @@ void FileCompress::print_compression( std::ostream& stream ) const {
 }
 
 std::ostream& operator<< (std::ostream& os, const FileCompress& obj) {
-  os << "----------------------" << std::endl;
+  os << "-----------------------------------------------------------" << std::endl;
   os << "File Compressor" << std::endl;
-  os << "----------------------" << std::endl;
+  os << "-----------------------------------------------------------" << std::endl;
   os << "File Size: " << obj.get_input_file_size() <<std::endl;
   os << "# Blocks: " << obj.get_number_blocks() << "("<< obj.get_block_size() << ")"<<std::endl;
-  os << "----------------------" << std::endl;
+  os << "-----------------------------------------------------------" << std::endl;
   os << "Compression By Blocks" << std::endl;
   obj.print_compression( os );
-  os << "----------------------" << std::endl;
+  os << "-----------------------------------------------------------" << std::endl;
   os << "Obtained Compression: " << obj.get_compression_ratio() << std::endl;
   os << "Output File Size: " << obj.get_output_file_size() << std::endl;
-  os << "----------------------" << std::endl;
+  os << "-----------------------------------------------------------" << std::endl;
   return os;
 }
 

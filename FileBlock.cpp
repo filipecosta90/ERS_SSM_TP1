@@ -17,7 +17,6 @@
 #include "SymbolTable.h"
 #include <math.h>       /* log2 */
 
-
 FileBlock::FileBlock( 
     std::string input, 
     int number, int start, int end
@@ -49,6 +48,10 @@ void FileBlock::codify_huffman(){
 }
 
 void FileBlock::produce_bitstream(){
+  std::vector<std::bitset<1>> header_encoded;
+  symbol_table.produce_header();
+  header_encoded = symbol_table.get_header(); 
+  output_bits.insert( output_bits.end(), header_encoded.begin(), header_encoded.end() );
   std::vector<char>::iterator it = input_chars.begin();
   for  ( ; it != input_chars.end() ; ++it )
   {
